@@ -1,9 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { removeItem, updateQuantity } from './CartSlice';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import './CartItem.css';
 
-const CartItem = ({ onContinueShopping }) => {
+const CartItem = ({ onContinueShopping, setAddedToCart }) => {
   const cart = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
 
@@ -12,11 +12,11 @@ const CartItem = ({ onContinueShopping }) => {
     const totalCost = cart.reduce((acc, item) => {
       return acc + parseInt(item.cost.replace('$', ''), 10) * item.quantity;
     }, 0);
-    return totalCost
+    return totalCost;
   };
 
   const handleContinueShopping = (e) => {
-    onContinueShopping(e)
+    onContinueShopping(e);
   };
 
   const handleCheckoutShopping = () => {
@@ -24,26 +24,30 @@ const CartItem = ({ onContinueShopping }) => {
   };
 
   const handleIncrement = (item) => {
-    const updatedItem = {...item, quantity: item.quantity + 1}
-    dispatch(updateQuantity(updatedItem))
+    const updatedItem = { ...item, quantity: item.quantity + 1 };
+    dispatch(updateQuantity(updatedItem));
   };
 
   const handleDecrement = (item) => {
     if (item.quantity <= 1) {
-      dispatch(removeItem(item))
+      handleRemove(item);
     }
 
-    const updatedItem = {...item, quantity: item.quantity - 1}
-    dispatch(updateQuantity(updatedItem))
+    const updatedItem = { ...item, quantity: item.quantity - 1 };
+    dispatch(updateQuantity(updatedItem));
   };
 
   const handleRemove = (item) => {
-    dispatch(removeItem(item))
+    dispatch(removeItem(item));
+    setAddedToCart((prevState) => ({
+      ...prevState,
+      [item.name]: false, // Set the product name as key and value as true to indicate it's added to cart
+    }));
   };
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
-    return parseInt(item.cost.replace('$', ''), 10) * item.quantity
+    return parseInt(item.cost.replace('$', ''), 10) * item.quantity;
   };
 
   return (
@@ -98,7 +102,9 @@ const CartItem = ({ onContinueShopping }) => {
           Continue Shopping
         </button>
         <br />
-        <button onClick={handleCheckoutShopping} className="get-started-button1">Checkout</button>
+        <button onClick={handleCheckoutShopping} className="get-started-button1">
+          Checkout
+        </button>
       </div>
     </div>
   );
@@ -106,6 +112,7 @@ const CartItem = ({ onContinueShopping }) => {
 
 CartItem.propTypes = {
   onContinueShopping: PropTypes.func,
+  setAddedToCart: PropTypes.func,
 };
 
 export default CartItem;
