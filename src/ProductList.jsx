@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import './ProductList.css';
 import CartItem from './CartItem';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from './CartSlice';
 
 function ProductList() {
   const [showCart, setShowCart] = useState(false);
   const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
+  const cart = useSelector((state) => state.cart.items);
   const [addedToCart, setAddedToCart] = useState({});
   const dispatch = useDispatch();
 
-  console.log()
+  const totalCartItems = cart.reduce((acc, item) => {
+    return acc + item.quantity;
+  }, 0);
 
   const plantsArray = [
     {
@@ -271,6 +274,7 @@ function ProductList() {
   };
 
   const styleA = {
+    position: 'relative',
     color: 'white',
     fontSize: '30px',
     textDecoration: 'none',
@@ -349,6 +353,7 @@ function ProductList() {
                   ></path>
                 </svg>
               </h1>
+              <span className='cart-mumber'> {totalCartItems}</span>
             </a>
           </div>
         </div>
@@ -371,7 +376,7 @@ function ProductList() {
                       alt={plant.name}
                     />
                     <div className="product-price">{plant.cost}</div>
-                    <div className='product-descr'>{plant.description}</div>
+                    <div className="product-descr">{plant.description}</div>
                     <button
                       className="product-button"
                       onClick={() => handleAddToCart(plant)}
