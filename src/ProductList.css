@@ -128,13 +128,17 @@ body {
   margin-top: 10px;
 }
 
+.product-button:hover {
+  background-color: #c0392b;
+}
+
 .product-button:disabled {
   background-color: grey;
   cursor: not-allowed;
 }
 
-.product-button:hover {
-  background-color: #c0392b;
+.product-button:disabled:hover: {
+  background-color: grey;
 }
 
 /* Pseudo-elements - Sale badge */
@@ -242,8 +246,12 @@ body {
   cursor: pointer;
 }
 
-.product-button:hover {
+.product-button:no-button {
   background-color: #45a049;
+}
+
+.product-button:disabled:hover {
+  background-color: grey;
 }
 
 .product-button.added-to-cart {
